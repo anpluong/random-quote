@@ -1,32 +1,32 @@
 import React, { Component } from "react";
 import axios from "axios";
+import './style.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quoteList: [], 
-      quote: ''
+      quote: '', 
+      author: ''
     };
 
     this.getRandomQuote();
   }
 
-  // function to get the random quote
+  //function to get the random quote
   getRandomQuote() {
     // use axios library to get the random quote
     axios
       .get(`https://talaikis.com/api/quotes/random/`, {
         headers: { Accept: "application/json" }
       })
-        .then(response => {
-          const quote = response.data.quote;
-          // create a new Array
-          const quoteList = [...this.state.quoteList, quote]
-          console.log(quoteList)
-          this.setState({ quoteList, quote });
+        .then(response => {          
+          this.setState({
+            quote: response.data.quote,
+            author: response.data.author
+          });
       });
-    }
+  }
 
   onClickEvent() {
     this.getRandomQuote();
@@ -34,13 +34,23 @@ class App extends Component {
 
   render() {    
    return (
-      <div>
-        <p>{this.state.quote}</p>
-        {/* I use the callback function which is called when the event is clicked */}
-        <p style={{textAlign: "center"}}><button type='button' onClick={() => this.onClickEvent()}> Get a random Quote</button></p>
+     <div class='container'>
+      <div id='quote-box'>
+        <div id='text'>        
+            {this.state.quote}
+        </div>
+        <div id='author'>
+            {this.state.author}
+        </div>        
+        <div>
+            <button type='button' onClick={() => this.onClickEvent()}> Get a random Quote</button>
+        </div>
+      </div>
       </div>
     )
   }
 }
+
+
 
 export default App
